@@ -1,0 +1,86 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+/* ERP blue visual theme */
+.fi-body {
+    background: linear-gradient(135deg, #eff6ff 0%, #f8fbff 52%, #dbeafe 100%);
+}
+
+.fi-main {
+    background: transparent;
+}
+
+.fi-topbar {
+    background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 55%, #3b82f6 100%);
+    border-bottom-color: #1e40af;
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(30, 64, 175, 0.18);
+}
+
+.fi-topbar * {
+    color: #ffffff;
+}
+
+.fi-topbar button:hover,
+.fi-topbar a:hover {
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+.fi-sidebar {
+    background: linear-gradient(180deg, #eff6ff 0%, #e0ecff 100%);
+    border-inline-end-color: #bfdbfe;
+}
+
+.fi-sidebar-header {
+    background: rgba(219, 234, 254, 0.78);
+    border-bottom-color: #bfdbfe;
+}
+
+.fi-sidebar-item-label,
+.fi-sidebar-group-label {
+    color: #1e3a8a;
+}
+
+.fi-sidebar-item-button {
+    border-radius: 0.65rem;
+    transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.fi-sidebar-item-button:hover {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+.fi-sidebar-item-active .fi-sidebar-item-button {
+    background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.22);
+}
+
+.fi-sidebar-item-active .fi-sidebar-item-label,
+.fi-sidebar-item-active .fi-sidebar-item-icon {
+    color: #ffffff;
+}
+
+.dark .fi-body {
+    background: linear-gradient(135deg, #0f172a 0%, #172554 100%);
+}
+
+.dark .fi-sidebar {
+    background: linear-gradient(180deg, #172554 0%, #1e3a8a 100%);
+    border-inline-end-color: #1e40af;
+}
+
+.dark .fi-sidebar-header {
+    background: rgba(30, 64, 175, 0.45);
+    border-bottom-color: #1e40af;
+}
+
+.dark .fi-sidebar-item-label,
+.dark .fi-sidebar-group-label {
+    color: #dbeafe;
+}
+
+.dark .fi-sidebar-item-button:hover {
+    background-color: rgba(59, 130, 246, 0.28);
+    color: #ffffff;
+}
