@@ -32,11 +32,14 @@
         .grand-total td { font-size: 16px; font-weight: bold; color: #0f766e; border-bottom: 3px solid #0f766e; }
         .footer { margin-top: 35px; border-top: 1px solid #cbd5e1; padding-top: 10px; color: #64748b; text-align: center; font-size: 10px; }
         .print-button { position: fixed; left: 20px; top: 20px; background: #0f766e; color: #fff; border: 0; padding: 9px 14px; border-radius: 5px; cursor: pointer; }
+        .pdf-only { display: none; }
         @media print { .print-button { display: none; } }
     </style>
 </head>
 <body>
-    <button class="print-button" onclick="window.print()">طباعة الفاتورة</button>
+    @unless($isPdf ?? false)
+        <button class="print-button" onclick="window.print()">طباعة الفاتورة</button>
+    @endunless
 
     <div class="header">
         <table class="header-table">
