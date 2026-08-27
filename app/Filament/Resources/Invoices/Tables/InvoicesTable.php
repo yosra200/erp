@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Invoices\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
@@ -24,6 +25,17 @@ class InvoicesTable
             }),
         ])->filters([
             SelectFilter::make('status')->label('الحالة')->options(['completed' => 'مكتملة', 'cancelled' => 'ملغاة']),
-        ])->recordActions([])->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
+        ])->recordActions([
+            Action::make('print')
+                ->label('طباعة')
+                ->icon('heroicon-o-printer')
+                ->url(fn ($record): string => route('invoices.print', $record))
+                ->openUrlInNewTab(),
+            Action::make('pdf')
+                ->label('تحميل PDF')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->url(fn ($record): string => route('invoices.pdf', $record))
+                ->openUrlInNewTab(),
+        ])->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
     }
 }
