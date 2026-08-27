@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\PurchaseInvoices\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
@@ -24,6 +25,17 @@ class PurchaseInvoicesTable
             }),
         ])->filters([
             SelectFilter::make('status')->label('الحالة')->options(['received' => 'مستلمة', 'cancelled' => 'ملغاة']),
-        ])->recordActions([])->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
+        ])->recordActions([
+            Action::make('print')
+                ->label('طباعة')
+                ->icon('heroicon-o-printer')
+                ->url(fn ($record): string => route('purchase-invoices.print', $record))
+                ->openUrlInNewTab(),
+            Action::make('pdf')
+                ->label('تحميل PDF')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->url(fn ($record): string => route('purchase-invoices.pdf', $record))
+                ->openUrlInNewTab(),
+        ])->toolbarActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
     }
 }
