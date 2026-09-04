@@ -12,7 +12,7 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['customer_id', 'warehouse_id', 'user_id', 'invoice_number', 'status', 'invoice_date', 'subtotal', 'discount', 'tax', 'total', 'paid', 'notes'];
+    protected $fillable = ['customer_id', 'warehouse_id', 'user_id', 'seller_id', 'invoice_number', 'status', 'invoice_date', 'subtotal', 'discount', 'tax', 'total', 'paid', 'commission_rate', 'commission_amount', 'distribution_total', 'notes'];
 
     protected function casts(): array
     {
@@ -23,6 +23,9 @@ class Invoice extends Model
             'tax' => 'decimal:2',
             'total' => 'decimal:2',
             'paid' => 'decimal:2',
+            'commission_rate' => 'decimal:2',
+            'commission_amount' => 'decimal:2',
+            'distribution_total' => 'decimal:2',
         ];
     }
 
@@ -47,6 +50,11 @@ class Invoice extends Model
     public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class);
+    }
+
+    public function seller(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'seller_id');
     }
 
     public function user(): BelongsTo

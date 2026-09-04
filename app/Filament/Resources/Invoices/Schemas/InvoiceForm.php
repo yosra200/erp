@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Invoices\Schemas;
 
 use App\Models\Product;
+use App\Models\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -21,6 +22,7 @@ class InvoiceForm
                 DatePicker::make('invoice_date')->label('تاريخ الفاتورة')->default(now())->required(),
                 Select::make('warehouse_id')->label('المخزن')->relationship('warehouse', 'name')->required()->searchable()->preload(),
                 Select::make('customer_id')->label('العميل')->relationship('customer', 'name')->searchable()->preload(),
+                Select::make('seller_id')->label('البائع')->options(fn (): array => User::query()->where('role', 'seller')->where('is_active', true)->orderBy('name')->pluck('name', 'id')->all())->searchable()->preload(),
                 Textarea::make('notes')->label('ملاحظات')->rows(2)->columnSpanFull(),
             ])->columns(3),
             Section::make('أصناف الفاتورة')->schema([
@@ -39,6 +41,7 @@ class InvoiceForm
                 TextInput::make('discount')->label('الخصم العام')->numeric()->minValue(0)->default(0),
                 TextInput::make('tax')->label('الضريبة / رسوم إضافية')->numeric()->minValue(0)->default(0),
                 TextInput::make('paid')->label('المدفوع')->numeric()->minValue(0)->default(0),
+                TextInput::make('commission_rate')->label('نسبة البائع %')->numeric()->minValue(0)->maxValue(100)->default(0),
             ])->columns(3),
         ]);
     }

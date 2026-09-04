@@ -12,7 +12,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category_id', 'unit_id', 'name', 'sku', 'barcode', 'description', 'cost_price', 'sale_price', 'min_stock', 'is_active'];
+    protected $fillable = ['category_id', 'unit_id', 'supplier_id', 'name', 'sku', 'barcode', 'description', 'cost_price', 'sale_price', 'min_stock', 'reorder_percent', 'is_active'];
 
     protected function casts(): array
     {
@@ -20,6 +20,7 @@ class Product extends Model
             'cost_price' => 'decimal:2',
             'sale_price' => 'decimal:2',
             'min_stock' => 'decimal:3',
+            'reorder_percent' => 'decimal:2',
             'is_active' => 'boolean',
         ];
     }
@@ -39,6 +40,11 @@ class Product extends Model
         } while (self::where('barcode', $barcode)->exists());
 
         return $barcode;
+    }
+
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(Supplier::class);
     }
 
     public function category(): BelongsTo
@@ -75,6 +81,11 @@ class Product extends Model
                 default => (float) $movement->quantity,
             };
         });
+    }
+
+    public function supplierAlerts(): HasMany
+    {
+        return $this->hasMany(SupplierStockAlert::class);
     }
 
     public function getCurrentStockAttribute(): float

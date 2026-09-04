@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class InvoiceResource extends Resource
@@ -27,6 +28,24 @@ class InvoiceResource extends Resource
     protected static ?string $pluralModelLabel = 'فواتير البيع';
 
     protected static string|UnitEnum|null $navigationGroup = 'المبيعات والمشتريات';
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+        if ($user?->isSeller()) {
+            $query->where('seller_id', $user->id);
+        }
+        if ($user?->isSupplier()) {
+            $query->whereHas('items.product', fn (Builder $products) => $products->where('supplier_id', $user->supplier_id));
+        }
+        return $query;
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->isAdmin() || auth()->user()?->isSeller();
+    }
 
     public static function form(Schema $schema): Schema
     {

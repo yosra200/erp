@@ -6,6 +6,7 @@ use App\Filament\Resources\Invoices\InvoiceResource;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\StockMovement;
+use App\Services\InventoryAlertService;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -50,6 +51,10 @@ class CreateInvoice extends CreateRecord
             $data['tax'] = $tax;
             $data['total'] = $total;
             $data['paid'] = min((float) ($data['paid'] ?? 0), $total);
+            $seller = ! empty($data['seller_id']) ? \App\Models\User::find($data['seller_id']) : (auth()->user()?->isSeller() ? auth()->user() : null);
+            $data['seller_id'] = $seller?->id;
+            $data['commission_rate'] = (float) ($data['commission_rate'] ?? $seller?->commission_rate ?? 0);
+            $data['commission_amount'] = round($total * ($data['commission_rate'] / 100), 2);
             $data['status'] = 'completed';
 
             $invoice = Invoice::create($data);
@@ -75,6 +80,7 @@ class CreateInvoice extends CreateRecord
                     'notes' => 'صرف تلقائي من فاتورة بيع '.$invoice->invoice_number,
                     'occurred_at' => now(),
                 ]);
+                InventoryAlertService::check($item['product'], (int) $invoice->warehouse_id);
             }
 
             return $invoice;
